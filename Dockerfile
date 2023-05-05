@@ -5,3 +5,7 @@ USER  root
 ENV RENV_VERSION 0.17.3
 RUN R -e "install.packages('remotes', repos = c(CRAN = 'https://cloud.r-project.org'))"
 RUN R -e "remotes::install_github('rstudio/renv@${RENV_VERSION}')"
+
+WORKDIR /project
+COPY renv.lock renv.lock
+RUN R -e "renv::init(bioconductor = '3.16')"
