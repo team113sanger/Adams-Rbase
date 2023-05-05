@@ -1,0 +1,9 @@
+{
+	"image": "mcr.microsoft.com/devcontainers/universal:2",
+	"features": {
+		"ghcr.io/devcontainers-contrib/features/pre-commit:2": {
+			"version": "latest"
+		}
+	},
+    "postCreateCommand": ".devcontainer/extra.sh"
+}
