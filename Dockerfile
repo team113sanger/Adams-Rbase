@@ -4,7 +4,8 @@ USER  root
 
 RUN apt-get update -y \
     && apt-get install --no-install-recommends -y \
-       libssl-dev libxml2-dev libcurl4-openssl-dev libmagick++-dev libharfbuzz-dev libfribidi-dev cmake libpoppler-cpp-dev \
+       libssl-dev libxml2-dev libcurl4-openssl-dev libmagick++-dev libharfbuzz-dev \
+       libfribidi-dev cmake libpoppler-cpp-dev libv8-dev \
     && rm -rf /var/lib/apt/lists/*
 
 ENV RENV_VERSION 0.17.3
