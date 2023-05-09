@@ -1,6 +1,6 @@
-FROM rocker/r-base:4.2.2
+FROM rocker/r-base:4.2.2 as builder
 
-USER  root
+USER root
 
 RUN apt-get update -y \
     && apt-get install --no-install-recommends -y \
@@ -12,7 +12,60 @@ ENV RENV_VERSION 0.17.3
 RUN R -e "install.packages('remotes', repos = c(CRAN = 'https://cloud.r-project.org'))"
 RUN R -e "remotes::install_github('rstudio/renv@${RENV_VERSION}')"
 
-WORKDIR /project
+WORKDIR /rbase
 COPY renv.lock renv.lock
 RUN R -e "renv::init(bioconductor = '3.16')"
 RUN R -e "renv::restore()"
+
+FROM rocker/r-base:4.2.2
+
+USER root
+
+ENV OPT /opt/rbase
+RUN mkdir -p $OPT/bin
+COPY --from=builder $OPT /rbase
+
+RUN adduser --disabled-password --gecos '' rbase && chsh -s /bin/bash && mkdir -p /home/rbase
+
+USER rbase
+WORKDIR /home/rbase
+
+# check dependencies can be found
+RUN R --version && \
+    R --slave -e 'packageVersion("BiocManager")' && \
+    R --slave -e 'packageVersion("biomaRt")' && \
+    R --slave -e 'packageVersion("BSgenome")' && \
+    R --slave -e 'packageVersion("chimeraviz")' && \
+    R --slave -e 'packageVersion("colourpicker")' && \
+    R --slave -e 'packageVersion("cowplot")' && \
+    R --slave -e 'packageVersion("data.table")' && \
+    R --slave -e 'packageVersion("devtools")' && \
+    R --slave -e 'packageVersion("ensembldb")' && \
+    R --slave -e 'packageVersion("extrafont")' && \
+    R --slave -e 'packageVersion("GenomicRanges")' && \
+    R --slave -e 'packageVersion("GetoptLong")' && \
+    R --slave -e 'packageVersion("ggpubr")' && \
+    R --slave -e 'packageVersion("ggrepel")' && \
+    R --slave -e 'packageVersion("ggsci")' && \
+    R --slave -e 'packageVersion("ggvenn")' && \
+    R --slave -e 'packageVersion("gridBase")' && \
+    R --slave -e 'packageVersion("gridExtra")' && \
+    R --slave -e 'packageVersion("IRanges")' && \
+    R --slave -e 'packageVersion("markdown")' && \
+    R --slave -e 'packageVersion("optparse")' && \
+    R --slave -e 'packageVersion("pdftools")' && \
+    R --slave -e 'packageVersion("pheatmap")' && \
+    R --slave -e 'packageVersion("plotly")' && \
+    R --slave -e 'packageVersion("randomcoloR")' && \
+    R --slave -e 'packageVersion("RColorBrewer")' && \
+    R --slave -e 'packageVersion("reshape2")' && \
+    R --slave -e 'packageVersion("rmarkdown")' && \
+    R --slave -e 'packageVersion("scales")' && \
+    R --slave -e 'packageVersion("tidyverse")' && \
+    R --slave -e 'packageVersion("viridis")' && \
+    R --slave -e 'packageVersion("XML")' && \
+    R --slave -e 'packageVersion("xml2")' && \
+    R --slave -e 'packageVersion("org.Hs.eg.db")' && \
+    R --slave -e 'packageVersion("BSgenome.Hsapiens.NCBI.GRCh38")'
+
+CMD ["/bin/bash"]
