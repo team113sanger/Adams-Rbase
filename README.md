@@ -1,2 +1,3 @@
 # Sanger-Docker-Build
-Creation of two docker containers for the Sanger Institute 
+
+Creation of two docker containers for the Sanger Institute
