@@ -1,4 +1,4 @@
-FROM rocker/r-base:4.2.2 as builder
+FROM rocker/r-base:4.2.2
 
 USER root
 
@@ -12,25 +12,17 @@ ENV RENV_VERSION 0.17.3
 RUN R -e "install.packages('remotes', repos = c(CRAN = 'https://cloud.r-project.org'))"
 RUN R -e "remotes::install_github('rstudio/renv@${RENV_VERSION}')"
 
-WORKDIR /rbase
-COPY renv.lock renv.lock
-RUN R -e "renv::init(bioconductor = '3.16')"
-RUN R -e "renv::restore()"
-
-FROM rocker/r-base:4.2.2
-
-USER root
-
-ENV OPT /opt/rbase
-RUN mkdir -p $OPT/bin
-COPY --from=builder $OPT /rbase
-
 RUN adduser --disabled-password --gecos '' rbase && chsh -s /bin/bash && mkdir -p /home/rbase
+
+RUN chmod a+rw /usr/local/lib/R/site-library
 
 USER rbase
 WORKDIR /home/rbase
 
-# check dependencies can be found
+COPY renv.lock renv.lock
+RUN R -e "renv::init(bioconductor = '3.16', force = TRUE)"
+RUN R -e "renv::restore()"
+
 RUN R --version && \
     R --slave -e 'packageVersion("BiocManager")' && \
     R --slave -e 'packageVersion("biomaRt")' && \
@@ -67,5 +59,3 @@ RUN R --version && \
     R --slave -e 'packageVersion("xml2")' && \
     R --slave -e 'packageVersion("org.Hs.eg.db")' && \
     R --slave -e 'packageVersion("BSgenome.Hsapiens.NCBI.GRCh38")'
-
-CMD ["/bin/bash"]
