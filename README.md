@@ -1,3 +1,2 @@
-# Sanger-Docker-Build
-
-Creation of two docker containers for the Sanger Institute
+# Adams-Rbase
+Dermatlas Docker image for R base (4.2.2) and packages
