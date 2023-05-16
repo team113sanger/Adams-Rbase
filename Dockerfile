@@ -6,7 +6,11 @@ RUN apt-get update -y \
     && apt-get install --no-install-recommends -y \
        libssl-dev libxml2-dev libcurl4-openssl-dev libmagick++-dev libharfbuzz-dev \
        libfribidi-dev cmake libpoppler-cpp-dev libv8-dev \
-    && rm -rf /var/lib/apt/lists/*
+       unattended-upgrades && \
+    unattended-upgrade -d -v && \
+    apt-get remove -yq unattended-upgrades && \
+    apt-get autoremove -yq && \
+    rm -rf /var/lib/apt/lists/*
 
 ENV RENV_VERSION 0.17.3
 RUN R -e "install.packages('remotes', repos = c(CRAN = 'https://cloud.r-project.org'))"
@@ -61,8 +65,5 @@ RUN R --version && \
     R --slave -e 'packageVersion("xml2")' && \
     R --slave -e 'packageVersion("org.Hs.eg.db")' && \
     R --slave -e 'packageVersion("BSgenome.Hsapiens.NCBI.GRCh38")'
-
-ENV OPT /opt/rbase
-ENV PATH $OPT/bin:$PATH
 
 CMD ["/bin/bash"]
