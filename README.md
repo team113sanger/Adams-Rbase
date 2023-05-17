@@ -44,13 +44,14 @@ singularity shell --cleanenv \
 ```
 
 ### Extending the images
+
 The extension_example folder contains a Dockerfile with an example of expanding the image to also include the package caret. This can be build using the command:
 
 ```
 docker build . -f extension_example/Dockerfiledocker build . -f extension_example/Dockerfile
 ```
 
-It takes a few minutes to run whilst it downloads and installs the caret and its dependencies. 
+It takes a few minutes to run whilst it downloads and installs the caret and its dependencies.
 
 This images can be run like above, using the IMAGE ID, accessed through `docker images`
 
