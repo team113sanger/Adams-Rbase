@@ -43,6 +43,24 @@ singularity shell --cleanenv \
     ghcr.io/cynapse-ccri/adams-rbase:develop
 ```
 
+### Extending the images
+The extension_example folder contains a Dockerfile with an example of expanding the image to also include the package caret. This can be build using the command:
+
+```
+docker build . -f extension_example/Dockerfiledocker build . -f extension_example/Dockerfile
+```
+
+It takes a few minutes to run whilst it downloads and installs the caret and its dependencies. 
+
+This images can be run like above, using the IMAGE ID, accessed through `docker images`
+
+```
+docker run --rm -ti \
+    -v /full/path/inputs:/home/rbase/inputs:ro \
+    -v /full/path/outputs:/home/rbase/outputs:rw \
+    <Image ID>
+```
+
 ## Development
 
 This repository has been configured to utilise the VSCode + GitHub Codespaces integration.  This means no setup is required.
