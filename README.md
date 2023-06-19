@@ -48,7 +48,7 @@ singularity shell --cleanenv \
 The extension_example folder contains a Dockerfile with an example of expanding the image to also include the package caret. This can be build using the command:
 
 ```
-docker build . -f extension_example/Dockerfiledocker build . -f extension_example/Dockerfile
+docker build . -f extension_example/Dockerfile -t adams-rbase:extended
 ```
 
 It takes a few minutes to run whilst it downloads and installs the caret and its dependencies.
@@ -59,7 +59,7 @@ This images can be run like above, using the IMAGE ID, accessed through `docker 
 docker run --rm -ti \
     -v /full/path/inputs:/home/rbase/inputs:ro \
     -v /full/path/outputs:/home/rbase/outputs:rw \
-    <Image ID>
+    adams-rbase:extended
 ```
 
 ## Development
