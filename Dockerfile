@@ -5,7 +5,7 @@ USER root
 RUN apt-get update -y \
     && apt-get install --no-install-recommends -y \
        libssl-dev libxml2-dev libcurl4-openssl-dev libmagick++-dev libharfbuzz-dev \
-       libfribidi-dev cmake libpoppler-cpp-dev libv8-dev \
+       libfribidi-dev cmake=3.25.1-1 libpoppler-cpp-dev libv8-dev \
        unattended-upgrades && \
     unattended-upgrade -d -v && \
     apt-get remove -yq unattended-upgrades && \
