@@ -53,7 +53,7 @@ docker build . -f extension_example/Dockerfile -t adams-rbase:extended
 
 It takes a few minutes to run whilst it downloads and installs the caret and its dependencies.
 
-This images can be run like above, using the IMAGE ID, accessed through `docker images`
+This images can be run like above, using the the tag "adams-rbase:extended" just assigned to it.
 
 ```
 docker run --rm -ti \
