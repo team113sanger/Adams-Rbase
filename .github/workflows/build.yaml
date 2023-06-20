@@ -74,6 +74,6 @@ jobs:
         docker pull ${PRIMARY_TAG}
         echo -e "\n\n----VERSIONS----"
         docker run --rm ${PRIMARY_TAG} R --version | head -n 1
-        docker run --rm ${PRIMARY_TAG} R --slave -e 'packageVersion("BiocManager")'
-        docker run --rm ${PRIMARY_TAG} R --slave -e 'packageVersion("chimeraviz")'
-        docker run --rm ${PRIMARY_TAG} R --slave -e 'packageVersion("colourpicker")'
+        echo -n "BiocManager: " && docker run --rm ${PRIMARY_TAG} R --slave -e 'packageVersion("BiocManager")'
+        echo -n "chimeraviz: " && docker run --rm ${PRIMARY_TAG} R --slave -e 'packageVersion("chimeraviz")'
+        echo -n "colourpicker: " && docker run --rm ${PRIMARY_TAG} R --slave -e 'packageVersion("colourpicker")'
