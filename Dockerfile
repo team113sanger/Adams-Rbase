@@ -66,4 +66,6 @@ RUN R --version && \
     R --slave -e 'packageVersion("org.Hs.eg.db")' && \
     R --slave -e 'packageVersion("BSgenome.Hsapiens.NCBI.GRCh38")'
 
+RUN chmod -R a+rw /home/rbase
+
 CMD ["/bin/bash"]
