@@ -22,6 +22,8 @@ RUN chmod a+rw /usr/local/lib/R/site-library
 
 RUN chown rbase /home/rbase
 
+RUN chmod -R a+rw /home/rbase
+
 USER rbase
 WORKDIR /home/rbase
 
@@ -65,7 +67,5 @@ RUN R --version && \
     R --slave -e 'packageVersion("xml2")' && \
     R --slave -e 'packageVersion("org.Hs.eg.db")' && \
     R --slave -e 'packageVersion("BSgenome.Hsapiens.NCBI.GRCh38")'
-
-RUN chmod -R a+rw /home/rbase
 
 CMD ["/bin/bash"]
