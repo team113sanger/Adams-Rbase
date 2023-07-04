@@ -22,7 +22,7 @@ RUN chmod a+rw /usr/local/lib/R/site-library
 
 RUN chown rbase /home/rbase
 
-RUN chmod -R a+rw /home/rbase
+RUN chmod -R a+rwx /home/rbase
 
 USER rbase
 WORKDIR /home/rbase
