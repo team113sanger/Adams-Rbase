@@ -23,20 +23,18 @@ ENV RENV_PATHS_ROOT="${OPT}"
 WORKDIR "${OPT}"
 
 COPY renv.lock_temp_copy renv.lock
-RUN R -e "renv::init(bioconductor = '3.16', force = TRUE)"
+RUN R -e "renv::init(bioconductor = '3.16', force = TRUE, settings = list(use.cache = TRUE))"
 RUN R -e "renv::restore()"
 
 RUN adduser --disabled-password --gecos '' rbase && chsh -s /bin/bash && mkdir -p /home/rbase
 
 RUN chmod a+rw /usr/local/lib/R/site-library
-
 RUN chown rbase /home/rbase
 
-RUN chmod -R a+rwx /home/rbase
-
 USER rbase
+ENV RENV_PATHS_ROOT="${OPT}"
 WORKDIR /home/rbase
-
+COPY renv.lock_temp_copy renv.lock
 RUN R -e "renv::restore()"
 
 #RUN R --version && \
@@ -75,5 +73,12 @@ RUN R -e "renv::restore()"
 #    R --slave -e 'packageVersion("xml2")' && \
 #    R --slave -e 'packageVersion("org.Hs.eg.db")' && \
 #    R --slave -e 'packageVersion("BSgenome.Hsapiens.NCBI.GRCh38")'
+
+USER root
+
+RUN chmod -R a+rwx /home/rbase
+RUN chmod -R a+rwx /opt/rbase
+
+USER rbase
 
 CMD ["/bin/bash"]
