@@ -24,6 +24,21 @@ docker run --rm -ti \
     ghcr.io/cynapse-ccri/adams-rbase:develop
 ```
 
+Once the container is running, open an R session.
+
+```
+R
+```
+
+Then restore the renv environment.
+
+```
+renv::restore()
+```
+
+You will need to agree to to the activation of the environment and loading of the packages (by typing "y").
+This will load the packages from the cache.
+
 ### Singularity
 
 Change `develop` as appropriate.  If private you will need to perform relevant authentication.
@@ -42,6 +57,23 @@ singularity shell --cleanenv \
     --bind /full/path/outputs:/home/rbase/outputs:rw \
     ghcr.io/cynapse-ccri/adams-rbase:develop
 ```
+
+Once the container is running, open an R session.
+
+```
+R
+```
+
+Next set two parameters to ensure renv restores from cache and then restore the renv environment.
+
+```
+Sys.setenv(RENV_PATHS_ROOT="/opt/rbase")
+renv::settings$use.cache(TRUE)
+renv::restore()
+```
+
+You will need to agree to to the activation of the environment and loading of the packages (by typing "y").
+This will load the packages from the cache.
 
 ### Extending the images
 
