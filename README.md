@@ -46,16 +46,16 @@ Change `develop` as appropriate.  If private you will need to perform relevant a
 ```
 singularity pull docker://ghcr.io/cynapse-ccri/adams-rbase:develop
 # creates adams-rbase_develop.sif
-singularity shell --cleanenv adams-rbase_develop.sif
+singularity shell -H /home/rbase --no-home --writable-tmpfs --cleanenv adams-rbase_develop.sif
 ```
 
 You will need to mount data appropriately via the singularity bind option `--bind`.  Recommended approach:
 
 ```
-singularity shell --cleanenv \
+singularity shell -H /home/rbase --no-home --writable-tmpfs --cleanenv \
     --bind /full/path/inputs:/home/rbase/inputs:ro \
     --bind /full/path/outputs:/home/rbase/outputs:rw \
-    ghcr.io/cynapse-ccri/adams-rbase:develop
+    adams-rbase_develop.sif
 ```
 
 Once the container is running, open an R session.
