@@ -26,7 +26,7 @@ COPY renv.lock renv.lock
 RUN R -e "renv::init(bioconductor = '3.16', force = TRUE, settings = list(use.cache = TRUE))"
 RUN R -e "renv::restore()"
 
-RUN adduser --disabled-password --gecos '' rbase && chsh -s /bin/bash && mkdir -p /home/rbase
+RUN useradd rbase --shell /bin/bash --create-home --home-dir /home/rbase
 
 RUN chmod a+rw /usr/local/lib/R/site-library
 RUN chown rbase /home/rbase
