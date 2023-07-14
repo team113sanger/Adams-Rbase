@@ -68,10 +68,9 @@ singularity exec --env-file singularity.env -H /home/rbase --no-home --writable-
     adams-rbase_develop.sif R
 ```
 
-Next set two parameters to ensure renv restores from cache and then restore the renv environment.
+Then restore the renv environment.
 
 ```
-renv::settings$use.cache(TRUE)
 renv::restore()
 ```
 
