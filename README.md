@@ -24,24 +24,58 @@ docker run --rm -ti \
     ghcr.io/cynapse-ccri/adams-rbase:develop
 ```
 
+Once the container is running, open an R session.
+
+```
+R
+```
+
+Then restore the renv environment.
+
+```
+renv::restore()
+```
+
+You will need to agree to to the activation of the environment and loading of the packages (by typing "y").
+This will load the packages from the cache.
+
 ### Singularity
+
+You will need to create an environment file, `singularity.env`, also included in repo as a file:
+
+```
+OPT="/opt/rbase"
+PATH="/opt/rbase/bin:$PATH"
+RENV_PATHS_ROOT="/opt/rbase"
+```
 
 Change `develop` as appropriate.  If private you will need to perform relevant authentication.
 
 ```
-singularity pull docker://ghcr.io/cynapse-ccri/adams-rbase:develop
 # creates adams-rbase_develop.sif
-singularity shell --cleanenv adams-rbase_develop.sif
+singularity pull docker://ghcr.io/cynapse-ccri/adams-rbase:develop
+# provides interactive shell
+singularity shell --env-file singularity.env -H /home/rbase --no-home --writable-tmpfs --cleanenv adams-rbase_develop.sif
 ```
 
 You will need to mount data appropriately via the singularity bind option `--bind`.  Recommended approach:
 
 ```
-singularity shell --cleanenv \
+# Directly executes R when starting (exec vs shell)
+singularity exec --env-file singularity.env -H /home/rbase --no-home --writable-tmpfs --cleanenv \
     --bind /full/path/inputs:/home/rbase/inputs:ro \
     --bind /full/path/outputs:/home/rbase/outputs:rw \
-    ghcr.io/cynapse-ccri/adams-rbase:develop
+    adams-rbase_develop.sif R
 ```
+
+Then restore the renv environment.
+
+```
+renv::restore()
+```
+
+You will need to agree to to the activation of the environment and loading of the packages (by typing "y").
+This will load the packages from the cache.
 
 ### Extending the images
 
