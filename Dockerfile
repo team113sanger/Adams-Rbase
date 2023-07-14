@@ -12,21 +12,29 @@ RUN apt-get update -y \
     apt-get autoremove -yq && \
     rm -rf /var/lib/apt/lists/*
 
+ENV OPT="/opt/rbase"
+ENV PATH="${OPT}/bin:$PATH"
+
 ENV RENV_VERSION 0.17.3
 RUN R -e "install.packages('remotes', repos = c(CRAN = 'https://cloud.r-project.org'))"
 RUN R -e "remotes::install_github('rstudio/renv@${RENV_VERSION}')"
 
-RUN adduser --disabled-password --gecos '' rbase && chsh -s /bin/bash && mkdir -p /home/rbase
+ENV RENV_PATHS_ROOT="${OPT}"
+WORKDIR "${OPT}"
+
+COPY renv.lock renv.lock
+RUN R -e "renv::init(bioconductor = '3.16', force = TRUE, settings = list(use.cache = TRUE))"
+RUN R -e "renv::restore()"
+
+RUN useradd rbase --shell /bin/bash --create-home --home-dir /home/rbase
 
 RUN chmod a+rw /usr/local/lib/R/site-library
-
 RUN chown rbase /home/rbase
 
 USER rbase
+ENV RENV_PATHS_ROOT="${OPT}"
 WORKDIR /home/rbase
-
 COPY renv.lock renv.lock
-RUN R -e "renv::init(bioconductor = '3.16', force = TRUE)"
 RUN R -e "renv::restore()"
 
 RUN R --version && \
@@ -65,5 +73,12 @@ RUN R --version && \
     R --slave -e 'packageVersion("xml2")' && \
     R --slave -e 'packageVersion("org.Hs.eg.db")' && \
     R --slave -e 'packageVersion("BSgenome.Hsapiens.NCBI.GRCh38")'
+
+USER root
+
+RUN chmod -R a+rwx /home/rbase
+RUN chmod -R a+rwx /opt/rbase
+
+USER rbase
 
 CMD ["/bin/bash"]
