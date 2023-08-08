@@ -19,7 +19,7 @@ ENV RENV_VERSION 0.17.3
 ENV BIOCMANAGER_VERSION 1.30.20
 ENV BIOCONDUCTOR_VERSION 3.16
 
-RUN R -e "install.packages('remotes', repos = c(CRAN = 'https://cloud.r-project.org'))"
+RUN R -e "install.packages('https://cran.r-project.org/src/contrib/Archive/remotes/remotes_2.4.2.tar.gz', repos=NULL, type='source')"
 RUN R -e "remotes::install_github('rstudio/renv@${RENV_VERSION}')"
 RUN R -e "remotes::install_version(package = 'BiocManager', version = '${BIOCMANAGER_VERSION}')"
 
