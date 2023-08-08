@@ -16,14 +16,18 @@ ENV OPT="/opt/rbase"
 ENV PATH="${OPT}/bin:$PATH"
 
 ENV RENV_VERSION 0.17.3
+ENV BIOCMANAGER_VERSION 1.30.20
+ENV BIOCONDUCTOR_VERSION 3.16
+
 RUN R -e "install.packages('remotes', repos = c(CRAN = 'https://cloud.r-project.org'))"
 RUN R -e "remotes::install_github('rstudio/renv@${RENV_VERSION}')"
+RUN R -e "remotes::install_version(package = 'BiocManager', version = '${BIOCMANAGER_VERSION}')"
 
 ENV RENV_PATHS_ROOT="${OPT}"
 WORKDIR "${OPT}"
 
 COPY renv.lock renv.lock
-RUN R -e "renv::init(bioconductor = '3.16', force = TRUE, settings = list(use.cache = TRUE))"
+RUN R -e "renv::init(bioconductor = '${BIOCONDUCTOR_VERSION}', force = TRUE, settings = list(use.cache = TRUE), bare = TRUE, restart = TRUE)"
 RUN R -e "renv::restore()"
 
 RUN useradd rbase --shell /bin/bash --create-home --home-dir /home/rbase
