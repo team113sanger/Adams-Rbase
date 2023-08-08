@@ -23,6 +23,8 @@ RUN R -e "install.packages('remotes', repos = c(CRAN = 'https://cloud.r-project.
 RUN R -e "remotes::install_github('rstudio/renv@${RENV_VERSION}')"
 RUN R -e "remotes::install_version(package = 'BiocManager', version = '${BIOCMANAGER_VERSION}')"
 
+ENV RENV_CONFIG_CONNECT_TIMEOUT=120
+ENV RENV_CONFIG_CONNECT_RETRY=5
 ENV RENV_PATHS_ROOT="${OPT}"
 WORKDIR "${OPT}"
 
