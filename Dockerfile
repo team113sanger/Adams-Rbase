@@ -25,6 +25,7 @@ RUN R -e "remotes::install_version(package = 'BiocManager', version = '${BIOCMAN
 
 ENV RENV_CONFIG_CONNECT_TIMEOUT=120
 ENV RENV_CONFIG_CONNECT_RETRY=5
+
 ENV RENV_PATHS_ROOT="${OPT}"
 WORKDIR "${OPT}"
 
