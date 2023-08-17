@@ -37,7 +37,7 @@ renv::restore()
 ```
 
 You will need to agree to to the activation of the environment and loading of the packages (by typing "y").
-This will load the packages from the cache.
+This will load the packages from the cache. Restarting R maybe needed by entering `q()`, saving the workspace image `y` and starting R `R`.
 
 ### Singularity
 
@@ -75,7 +75,7 @@ renv::restore()
 ```
 
 You will need to agree to to the activation of the environment and loading of the packages (by typing "y").
-This will load the packages from the cache.
+This will load the packages from the cache. Restarting R maybe needed by entering `q()`, saving the workspace image `y` and starting R `R`.
 
 ### Extending the images
 

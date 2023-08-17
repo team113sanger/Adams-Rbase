@@ -191,7 +191,7 @@
     },
     "BiocManager": {
       "Package": "BiocManager",
-      "Version": "1.30.21",
+      "Version": "1.30.20",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [

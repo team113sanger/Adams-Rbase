@@ -2,6 +2,15 @@ FROM rocker/r-base:4.2.2
 
 USER root
 
+ENV REMOTES_VERSION 2.4.2
+ENV RENV_VERSION 0.17.3
+ENV BIOCMANAGER_VERSION 1.30.20
+ENV BIOCONDUCTOR_VERSION 3.16
+
+ENV RENV_CONFIG_CONNECT_TIMEOUT=120
+ENV RENV_CONFIG_CONNECT_RETRY=5
+RUN R -e "options('download.file.method'='curl', 'timeout'=120)"
+
 RUN apt-get update -y \
     && apt-get install --no-install-recommends -y \
        libssl-dev libxml2-dev libcurl4-openssl-dev libmagick++-dev libharfbuzz-dev \
@@ -15,15 +24,15 @@ RUN apt-get update -y \
 ENV OPT="/opt/rbase"
 ENV PATH="${OPT}/bin:$PATH"
 
-ENV RENV_VERSION 0.17.3
-RUN R -e "install.packages('remotes', repos = c(CRAN = 'https://cloud.r-project.org'))"
+RUN R -e "install.packages('https://cran.r-project.org/src/contrib/Archive/remotes/remotes_${REMOTES_VERSION}.tar.gz', repos=NULL, type='source')"
 RUN R -e "remotes::install_github('rstudio/renv@${RENV_VERSION}')"
+RUN R -e "remotes::install_version(package = 'BiocManager', version = '${BIOCMANAGER_VERSION}')"
 
 ENV RENV_PATHS_ROOT="${OPT}"
 WORKDIR "${OPT}"
 
 COPY renv.lock renv.lock
-RUN R -e "renv::init(bioconductor = '3.16', force = TRUE, settings = list(use.cache = TRUE))"
+RUN R -e "renv::init(bioconductor = '${BIOCONDUCTOR_VERSION}', force = TRUE, settings = list(use.cache = TRUE), bare = TRUE, restart = TRUE)"
 RUN R -e "renv::restore()"
 
 RUN useradd rbase --shell /bin/bash --create-home --home-dir /home/rbase
